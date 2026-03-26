@@ -31,64 +31,73 @@ This project aims to build an automated system to assist in detecting pneumonia 
 
 ---
 
-## 📊 Model Evaluation
+## 📊 Model Evaluation & Confusion Matrix Analysis
 
-- Evaluated using:
-  - Accuracy
-  - Precision
-  - Recall
-  - F1 Score
+### 🧠 Baseline CNN Results
 
-### ⚠️ Key Insight
-In medical diagnosis, **recall is more important than accuracy**, since missing a pneumonia case (false negative) can be critical.
+| Class       | Precision | Recall | F1-Score | Support |
+|------------|----------|--------|----------|--------|
+| NORMAL      | 0.88     | 0.84   | 0.86     | 234    |
+| PNEUMONIA   | 0.91     | 0.93   | 0.92     | 390    |
 
----
-
-## 🔍 Error Analysis
-
-- Model struggles with:
-  - Low-contrast X-ray images
-  - Early-stage pneumonia cases
-  - Visually ambiguous samples
-
-- Some predictions show **high confidence but incorrect results**, indicating overfitting to certain patterns
+- **Accuracy:** ~0.90  
+- **Macro Avg F1-score:** 0.89  
+- **Weighted Avg F1-score:** 0.90  
 
 ---
 
-## 📊 Confusion Matrix
+### 🚀 MobileNetV2 Results
 
-![Baseline](<img width="709" height="407" alt="Screenshot 2026-03-26 123436" src="https://github.com/user-attachments/assets/c579e390-0bc0-4d61-a327-b8bf990b3921" />
-)
-![MobileNetV2](<img width="645" height="201" alt="Screenshot 2026-03-26 123736" src="https://github.com/user-attachments/assets/47fea996-d71b-4f95-a095-6ff3e6be046d" />
-)
+| Class       | Precision | Recall | F1-Score | Support |
+|------------|----------|--------|----------|--------|
+| NORMAL      | 0.98     | 0.68   | 0.80     | 234    |
+| PNEUMONIA   | 0.84     | 0.99   | 0.91     | 390    |
 
-### 🔍 Interpretation
+- **Accuracy:** ~0.87  
+- **Macro Avg F1-score:** 0.85  
+- **Weighted Avg F1-score:** 0.87  
 
-- True Positives (Pneumonia correctly detected): High  
-- True Negatives (Normal correctly detected): High  
+---
 
-- ⚠️ False Negatives: Critical cases where pneumonia is missed  
-- ⚠️ False Positives: Normal cases misclassified as pneumonia  
+## 🔍 Key Observations (Critical Insights)
 
-### Key Insight:
-The model shows strong overall performance, but false negatives remain a concern. In medical applications, minimizing false negatives is crucial, as missed diagnoses can have serious consequences.
+### 1. Baseline CNN Performance
+- Balanced performance across both classes  
+- Good trade-off between precision and recall  
+- More stable and reliable predictions overall  
 
-This indicates the need for:
-- Improving sensitivity (recall)
-- Better handling of subtle pneumonia cases
+---
 
-## 📈 Results
+### 2. MobileNetV2 Behavior
+- Extremely high **recall for pneumonia (0.99)** → almost all pneumonia cases detected  
+- But very low **recall for normal (0.68)** → many normal cases misclassified as pneumonia  
 
-| Model              | Accuracy |
-|-------------------|---------|
-| Baseline CNN      | ~88%    |
-| MobileNetV2       | ~87%    |
+👉 This indicates:
+- Model is **biased towards predicting pneumonia**
+- Likely due to **class imbalance or overfitting to dominant features**
 
-### Insight:
-Transfer learning did not significantly outperform the baseline model, possibly due to:
-- Domain difference (ImageNet vs X-ray images)
-- Limited dataset size
+---
 
+### ⚠️ Medical Insight (IMPORTANT)
+
+- **False Negatives (missing pneumonia)** are dangerous  
+- MobileNetV2 minimizes this risk (high recall = good)  
+- But increases **False Positives** → unnecessary alarms  
+
+👉 Trade-off:
+- **Baseline CNN → Balanced model**
+- **MobileNetV2 → Safer but more conservative (over-predicts pneumonia)**
+
+---
+
+## 🧠 Final Conclusion
+
+- Baseline CNN provides **more balanced and stable performance**
+- MobileNetV2 prioritizes **sensitivity (recall)** over precision
+- In real-world medical use:
+  - High recall is preferred  
+  - But excessive false positives can reduce usability
+    
 ---
 
 ## 🛠️ Tech Stack
@@ -122,3 +131,5 @@ Transfer learning did not significantly outperform the baseline model, possibly 
 This project demonstrates the application of deep learning in medical imaging, highlighting both the potential and limitations of CNN-based models in real-world scenarios.
 
 ---
+
+
