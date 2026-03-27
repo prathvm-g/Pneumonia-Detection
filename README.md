@@ -1,135 +1,243 @@
-# 🩺 Pneumonia Detection using Chest X-rays
-
-A deep learning-based system to detect pneumonia from chest X-ray images using Convolutional Neural Networks (CNN) and transfer learning.
+# 🫁 Pneumonia Detection from Chest X-Rays
 
 ---
 
-## 🚀 Problem Statement
+## 📌 Project Overview
 
-Pneumonia is a serious respiratory condition that requires early and accurate detection. Manual diagnosis from chest X-rays can be time-consuming and prone to error, especially in high-volume medical settings.
+This project develops an **AI-powered system** to detect pneumonia from chest X-ray images
+using deep learning. It is a **binary classification** task with two target classes:
+`NORMAL` and `PNEUMONIA`.
 
-This project aims to build an automated system to assist in detecting pneumonia from X-ray images.
+The project follows a complete, professional ML pipeline:
+- Exploratory Data Analysis
+- Image Preprocessing & Augmentation
+- Baseline CNN trained from scratch
+- Transfer Learning with MobileNetV2
+- Clinical evaluation with medical metrics
+- Grad-CAM visual explainability
 
----
-
-## 🧠 Approach
-
-### 1. Data Preprocessing
-- Resized and normalised chest X-ray images
-- Handled class imbalance
-- Split the dataset into training, validation, and test sets
-
-### 2. Model Development
-- Built a **baseline CNN model** for image classification
-- Implemented **Transfer Learning using MobileNetV2**
-- Fine-tuned top layers to improve performance on medical data
-
-### 3. Regularization & Optimization
-- EarlyStopping to prevent overfitting
-- ReduceLROnPlateau for adaptive learning rate
-- Data augmentation for better generalisation
+> ⚠️ **Disclaimer:** This model is a decision-support tool only.
+> It is not a substitute for professional medical diagnosis.
 
 ---
 
-## 📊 Model Evaluation & Confusion Matrix Analysis
+## 🎯 Results Summary
 
-### 🧠 Baseline CNN Results
+| Model | Accuracy | Pneumonia Recall | Normal Precision | F1 Score |
+|-------|----------|-----------------|-----------------|----------|
+| Baseline CNN | 88% | 0.89 | 0.83 | 0.91 |
+| MobileNetV2 (Transfer Learning) | 87% | **0.98** | **0.96** | 0.90 |
 
-| Class       | Precision | Recall | F1-Score | Support |
-|------------|----------|--------|----------|--------|
-| NORMAL      | 0.88     | 0.84   | 0.86     | 234    |
-| PNEUMONIA   | 0.91     | 0.93   | 0.92     | 390    |
-
-- **Accuracy:** ~0.90  
-- **Macro Avg F1-score:** 0.89  
-- **Weighted Avg F1-score:** 0.90  
+> **Key insight:** MobileNetV2 catches 98% of real pneumonia cases —
+> missing only 2% vs 11% for the baseline. In healthcare, this difference is critical.
 
 ---
 
-### 🚀 MobileNetV2 Results
-
-| Class       | Precision | Recall | F1-Score | Support |
-|------------|----------|--------|----------|--------|
-| NORMAL      | 0.98     | 0.68   | 0.80     | 234    |
-| PNEUMONIA   | 0.84     | 0.99   | 0.91     | 390    |
-
-- **Accuracy:** ~0.87  
-- **Macro Avg F1-score:** 0.85  
-- **Weighted Avg F1-score:** 0.87  
-
----
-
-## 🔍 Key Observations (Critical Insights)
-
-### 1. Baseline CNN Performance
-- Balanced performance across both classes  
-- Good trade-off between precision and recall  
-- More stable and reliable predictions overall  
-
----
-
-### 2. MobileNetV2 Behavior
-- Extremely high **recall for pneumonia (0.99)** → almost all pneumonia cases detected  
-- But very low **recall for normal (0.68)** → many normal cases misclassified as pneumonia  
-
-👉 This indicates:
-- Model is **biased towards predicting pneumonia**
-- Likely due to **class imbalance or overfitting to dominant features**
-
----
-
-### ⚠️ Medical Insight (IMPORTANT)
-
-- **False Negatives (missing pneumonia)** are dangerous  
-- MobileNetV2 minimizes this risk (high recall = good)  
-- But increases **False Positives** → unnecessary alarms  
-
-👉 Trade-off:
-- **Baseline CNN → Balanced model**
-- **MobileNetV2 → Safer but more conservative (over-predicts pneumonia)**
+## 🗂️ Project Structure
+```
+pneumonia-detection/
+│
+├── README.md                              ← You are here
+├── requirements.txt                       ← Python dependencies
+├── .gitignore                             ← Files excluded from GitHub
+│
+├── notebooks/
+│   ├── task1_load_explore.ipynb           ← Task 1: Load & Explore (2 marks)
+│   ├── task2_preprocessing.ipynb          ← Task 2: Preprocessing & Augmentation (4 marks)
+│   ├── task3_baseline_cnn.ipynb           ← Task 3: Baseline CNN (4 marks)
+│   ├── task4_evaluation.ipynb             ← Task 4: Model Evaluation (2 marks)
+│   ├── task5_transfer_learning.ipynb      ← Task 5: Transfer Learning (4 marks)
+│   ├── task6_visualise_predictions.ipynb  ← Task 6: Visualise Predictions (2 marks)
+│   ├── task8_documentation.ipynb          ← Task 8: Documentation (2 marks)
+│   └── optional_gradcam.ipynb             ← Bonus: Grad-CAM Explainability
+│
+├── src/
+│   ├── config.py                          ← Central config (paths, hyperparameters)
+│   ├── data_loader.py                     ← Dataset loading & Keras generators
+│   ├── model_builder.py                   ← CNN and MobileNetV2 model definitions
+│   ├── trainer.py                         ← Training loops and callbacks
+│   ├── evaluator.py                       ← Metrics, confusion matrix, plots
+│   └── visualiser.py                      ← Prediction & Grad-CAM visualisations
+│
+└── outputs/                               ← Saved models (git-ignored)
+    ├── baseline_cnn.h5
+    └── pneumonia_model.h5
+```
 
 ---
 
-## 🧠 Final Conclusion
+## 📁 Dataset
 
-- Baseline CNN provides **more balanced and stable performance**
-- MobileNetV2 prioritizes **sensitivity (recall)** over precision
-- In real-world medical use:
-  - High recall is preferred  
-  - But excessive false positives can reduce usability
-    
----
+**Chest X-Ray Images (Pneumonia)** — Kermany et al., Kaggle:
+> https://www.kaggle.com/datasets/paultimothymooney/chest-xray-pneumonia
 
-## 🛠️ Tech Stack
+| Split | NORMAL | PNEUMONIA | Total |
+|-------|--------|-----------|-------|
+| Train | 1,341 | 3,875 | 5,216 |
+| Val | 8 | 8 | 16 |
+| Test | 234 | 390 | 624 |
 
-- Python  
-- TensorFlow / Keras  
-- NumPy, Matplotlib  
-- CNN, Transfer Learning (MobileNetV2)
+> ⚠️ Note: Significant class imbalance — 74.29% Pneumonia vs 25.71% Normal in training set.
 
----
-
-## ⚠️ Limitations
-
-- Limited dataset size affects generalisation  
-- Model struggles with subtle pneumonia patterns  
-- No deployment (currently notebook-based)
-
----
-
-## 🚀 Future Improvements
-
-- Use advanced architectures (ResNet, EfficientNet)  
-- Improve dataset quality and size  
-- Deploy model using Streamlit or FastAPI  
-- Perform deeper error analysis on misclassified samples  
+After downloading, extract so the structure looks like:
+```
+chest_xray/
+├── train/
+│   ├── NORMAL/
+│   └── PNEUMONIA/
+├── val/
+│   ├── NORMAL/
+│   └── PNEUMONIA/
+└── test/
+    ├── NORMAL/
+    └── PNEUMONIA/
+```
 
 ---
 
-## 📌 Conclusion
+## ⚙️ Setup
 
-This project demonstrates the application of deep learning in medical imaging, highlighting both the potential and limitations of CNN-based models in real-world scenarios.
+### 1. Clone the repository
+```bash
+git clone https://github.com/prathvm-g/pneumonia-detection.git
+cd pneumonia-detection
+```
+
+### 2. Install dependencies
+```bash
+pip install -r requirements.txt
+```
+
+### 3. Update dataset path
+Open `src/config.py` and update:
+```python
+BASE_DIR = '/content/drive/MyDrive/chest_xray'  # your path here
+```
+
+### 4. Run on Google Colab (recommended)
+Each notebook mounts Google Drive automatically.
+Run notebooks in order: Task 1 → Task 2 → ... → Task 8 → Grad-CAM
 
 ---
 
+## 🧪 Assignment Tasks
 
+| Steps | Notebook | Description |
+|------|----------|-------|-------------|
+| 1 | task1_load_explore.ipynb | Load dataset, count images, visualise samples |
+| 2 | task2_preprocessing.ipynb | Resize, normalise, augment with ImageDataGenerator |
+| 3 | task3_baseline_cnn.ipynb | Build & train baseline CNN from scratch |
+| 4 | task4_evaluation.ipynb | Confusion matrix, accuracy, F1, clinical interpretation |
+| 5 | task5_transfer_learning.ipynb | MobileNetV2, 2-phase training, model comparison |
+| 6 | task6_visualise_predictions.ipynb | Correct/incorrect/hard-case visualisations |
+| 8 | task8_documentation.ipynb | 2/20 | Reflections, clinical implications, future work |
+| ✨ | optional_gradcam.ipynb | Bonus | Grad-CAM heatmap overlays for explainability |
+
+---
+
+## 🏗️ Pipeline Architecture
+```
+Raw X-Ray Images (JPEG)
+         │
+         ▼
+Task 1: Explore ──── Count images, visualise samples, check sizes
+         │
+         ▼
+Task 2: Preprocess ── Resize 224×224, normalise [0,1], augment training
+         │
+         ▼
+Task 3: Baseline CNN ─ 3×(Conv2D→BatchNorm→MaxPool) → Dense → sigmoid
+         │
+         ▼
+Task 4: Evaluate ──── Confusion matrix, recall, F1, clinical analysis
+         │
+         ▼
+Task 5: MobileNetV2 ─ Phase 1 (frozen) → Phase 2 (fine-tune last 30 layers)
+         │
+         ▼
+Task 6: Visualise ─── Correct vs incorrect predictions, hard cases
+         │
+         ▼
+Grad-CAM: Explain ─── Heatmap overlays showing model attention regions
+```
+
+---
+
+## 🧠 Key Concepts Learned
+
+### Why CNNs for Medical Images?
+CNNs learn spatial hierarchies of features:
+- **Early layers:** edges, corners, basic textures
+- **Middle layers:** shapes, patterns, organ structures
+- **Deep layers:** high-level features like consolidations
+
+### Why Transfer Learning?
+Training from scratch on 5,216 images risks overfitting.
+MobileNetV2 pretrained on 1.2M ImageNet images already knows
+how to detect rich visual features — we just adapt them to X-rays.
+
+### Why Recall over Accuracy in Healthcare?
+- **False Negative** (missed pneumonia) → patient goes untreated → potentially fatal ❌
+- **False Positive** (false alarm) → extra tests → inconvenient but not dangerous ⚠️
+- Therefore: **maximise recall**, accept lower precision if necessary
+
+### Why Grad-CAM?
+Doctors need to know WHERE the model looked, not just WHAT it decided.
+Grad-CAM makes the model transparent and trustworthy for clinical use.
+
+---
+
+## 🏥 Clinical Relevance
+
+### How this model can help doctors
+- **Triage:** Automatically flag high-probability pneumonia for priority review
+- **Low-resource settings:** First-line screening where radiologists are scarce
+- **Consistency:** Objective assessment without fatigue or shift bias
+- **Education:** Grad-CAM overlays help train junior radiologists
+
+### Limitations
+- Single-source dataset — may not generalise across hospitals
+- Binary only — cannot detect other lung conditions
+- Requires clinical validation before real-world deployment
+- Black box without Grad-CAM — doctors cannot see reasoning
+- Very small validation set (16 images) — unreliable val metrics
+
+---
+
+## 🔮 Future Work
+
+| Priority | Extension |
+|----------|-----------|
+| High | NIH Chest X-ray Dataset (100k+ images, 14 conditions) |
+| High | Grad-CAM integration into clinical dashboard |
+| Medium | Multi-label classification (COVID-19, effusion, cardiomegaly) |
+| Medium | Ensemble: MobileNetV2 + EfficientNet + DenseNet |
+| Medium | Bayesian uncertainty estimation |
+| Low | Streamlit/Gradio web app for clinical demonstration |
+| Low | DICOM format support for raw medical images |
+
+---
+
+## 📦 Tech Stack
+
+| Tool | Purpose |
+|------|---------|
+| Python 3.10 | Core language |
+| TensorFlow / Keras | Model building and training |
+| MobileNetV2 | Pretrained transfer learning base |
+| NumPy / Pandas | Data manipulation |
+| Matplotlib / Seaborn | Visualisation |
+| scikit-learn | Evaluation metrics |
+| Pillow / OpenCV | Image processing |
+| Google Colab | Training environment (free GPU) |
+
+---
+
+## 👤 Author
+
+**Pratham Gupta**
+- GitHub: [@prathvm-g](https://github.com/prathvm-g)
+
+---
+
+⭐ If you found this project useful, please star the repository!
