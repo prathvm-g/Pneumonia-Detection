@@ -120,18 +120,70 @@ Run notebooks in order: Task 1 → Task 2 → ... → Task 8 → Grad-CAM
 
 ---
 
-## 🧪 Assignment Tasks
+### 3. Dataset Setup
+
+Download the dataset from Kaggle:
+https://www.kaggle.com/datasets/paultimothymooney/chest-xray-pneumonia
+
+Extract and place the `chest_xray` folder in one of these locations:
+
+**Option A: In a `dataset` subfolder (recommended)**
+```
+Pneumonia Detection/
+├── Pneumonia_Image_Detection.ipynb
+└── dataset/
+    └── chest_xray/
+        ├── train/
+        ├── val/
+        └── test/
+```
+
+**Option B: Directly in the project folder**
+```
+Pneumonia Detection/
+├── Pneumonia_Image_Detection.ipynb
+└── chest_xray/
+    ├── train/
+    ├── val/
+    └── test/
+```
+
+If using Option B, update `BASE_DIR` in the notebook:
+```python
+BASE_DIR = os.path.join(NOTEBOOK_DIR, 'chest_xray')
+```
+
+### 4. Run the notebook
+
+**Using VS Code:**
+1. Open the `Pneumonia_Image_Detection.ipynb` file in VS Code
+2. Select a Python kernel with TensorFlow installed
+3. Run cells in order from top to bottom
+
+**Using Jupyter:**
+```bash
+jupyter notebook Pneumonia_Image_Detection.ipynb
+```
+
+**Using Google Colab (alternative):**
+1. Upload the notebook to Google Drive
+2. Open with Colab
+3. Update `BASE_DIR` to point to your mounted Drive path
+
+---
+
+## 🧪 Tasks
 
 | Steps | Notebook | Description |
 |------|----------|-------|-------------|
-| 1 | task1_load_explore.ipynb | Load dataset, count images, visualise samples |
-| 2 | task2_preprocessing.ipynb | Resize, normalise, augment with ImageDataGenerator |
-| 3 | task3_baseline_cnn.ipynb | Build & train baseline CNN from scratch |
-| 4 | task4_evaluation.ipynb | Confusion matrix, accuracy, F1, clinical interpretation |
-| 5 | task5_transfer_learning.ipynb | MobileNetV2, 2-phase training, model comparison |
-| 6 | task6_visualise_predictions.ipynb | Correct/incorrect/hard-case visualisations |
-| 8 | task8_documentation.ipynb | 2/20 | Reflections, clinical implications, future work |
-| ✨ | optional_gradcam.ipynb | Bonus | Grad-CAM heatmap overlays for explainability |
+| 1 | 1_load_explore.ipynb | Load dataset, count images, visualise samples |
+| 2 | 2_preprocessing.ipynb | Resize, normalise, augment with ImageDataGenerator |
+| 3 | 3_baseline_cnn.ipynb | Build & train baseline CNN from scratch |
+| 4 | 4_evaluation.ipynb | Confusion matrix, accuracy, F1, clinical interpretation |
+| 5 | 5_transfer_learning.ipynb | MobileNetV2, 2-phase training, model comparison |
+| 6 | 6_visualise_predictions.ipynb | Correct/incorrect/hard-case visualisations |
+| 8 | 8_documentation.ipynb | Reflections, clinical implications, future work |
+| 9 |_gradcam.ipynb | Grad-CAM heatmap overlays for explainability |
 
 ---
 
